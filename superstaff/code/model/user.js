@@ -1,10 +1,9 @@
-/*
-Передаем в функцию  
-*/
-module.exports = function (sequelize, DataTypes) {
+"use strict";
 
-  return sequelize.define(
-    'User', {
+module.exports = function (DataBase, DataTypes) {
+
+  const User = DataBase.define(
+    'user', {
     last_name: {
       type: DataTypes.STRING(32),
       allowNull: false,
@@ -43,4 +42,6 @@ module.exports = function (sequelize, DataTypes) {
       comment: 'удаление пользователя'
     }
   })
+
+  return User;
 };

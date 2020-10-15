@@ -1,12 +1,17 @@
-const user = require('./user.js');
-const {sequelize, DataTypes}    = require('sequelize');
+"use strict";
 
-//const dbUser = user( sequelize, DataTypes);
+const {Sequelize, DataTypes}    = require('sequelize');
+const User = require('./user.js');
 
-/* Define relationships 
-/dbUser.hasManu( dbAssignment );
+const DataBase = new Sequelize('staff', 'userstaff', '6Cjj6B[>2NQ^', {
+    host: 'localhost',
+    dialect: 'mysql'
+  });
+  
+const dbUser = User(DataBase, DataTypes);
+// Define relationships 
+//dbUser.hasManu( dbAssignment );
 
 module.exports = {
     user : dbUser,
 };
-*/
