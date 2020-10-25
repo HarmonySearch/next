@@ -1,0 +1,12 @@
+MySQL Server
+Логин: root
+Пароль: h49r3VycgnC}
+Пароль 2: 6Cjj6B[>2NQ^
+
+
+ubuntu
+Логин: ubuntu
+Пароль: {b3*53acESdq
+
+http://192.168.2.202:8080/
+http://192.168.2.202:3000/
