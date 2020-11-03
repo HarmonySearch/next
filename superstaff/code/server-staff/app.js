@@ -1,19 +1,38 @@
-const express = require('express'),
-  cors = require('cors'),
-  app = express(),
-  bcrypt = require('bcrypt'),
-  session = require('express-session');
+/* 
 
+*/
+const parseurl = require('parseurl') // для примера
+const express = require('express')
+const app = express()
+
+const cors = require('cors') // разрешение перекрестных ссылок
+const bcrypt = require('bcrypt') // хеширование паролей
+const session = require('express-session') // сессии
+const redis = require('redis') // БД redis
+// ---- БД для сессий ------------------------
+let RedisStore = require('connect-redis')(session)
+let redisClient = redis.createClient()
+// ---- БД ------------------------
 const { Sequelize, DataTypes } = require('sequelize');
 const { db, user_tab } = require('./model/database'); // ссылка на базу данных и таблицы
 
 app.set('port', process.env.PORT || 8080);
 
-app.use(cors()); // разрешение перекрестных ссылок
+/**
+ * Весь этот код запускается при каждом запросе. т.е. как только експресс отправляет ответ
+ * клиенту, то всё что находится в 
+ */
+
+app.use(cors()); 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-
+app.use(session({
+  store: new RedisStore({ client: redisClient }),
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false
+}))
 
 /* логин ==============
 app.post('/signin', function (request, response) {
@@ -35,6 +54,31 @@ app.post('/activation', function (request, response) {
 
 
 */
+
+app.use(function (req, res, next) {
+  if (!req.session.views) {
+    req.session.views = {}
+  }
+
+  // get the url pathname
+  var pathname = parseurl(req).pathname
+  //console.log(pathname);
+  //console.log(req.session.id);
+  console.log(req.sessionID);
+  // count the views
+  req.session.views[pathname] = (req.session.views[pathname] || 0) + 1
+
+  next()
+})
+
+app.get('/foo', function (req, res, next) {
+
+  res.send('you viewed this page ' + req.session.views['/foo'] + ' times')
+})
+
+app.get('/bar', function (req, res, next) {
+  res.send('you viewed this page ' + req.session.views['/bar'] + ' times')
+})
 
 // 
 /* ---- СОЗДАНИЕ АККАУНТА -----------------------------------------------------

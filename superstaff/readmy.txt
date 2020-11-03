@@ -11,5 +11,5 @@ ubuntu
 http://192.168.2.202:8080/
 http://192.168.2.202:3000/
 
-cd react-superstaff; npm start;
+cd react-staff; npm start;
 cd server-staff; node app.js;
